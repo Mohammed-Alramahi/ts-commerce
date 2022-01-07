@@ -2,9 +2,7 @@ import {
   BaseEntity,
   Entity,
   JoinColumn,
-  ManyToMany,
   ManyToOne,
-  OneToOne,
   PrimaryColumn,
 } from 'typeorm';
 import Client from './client';
