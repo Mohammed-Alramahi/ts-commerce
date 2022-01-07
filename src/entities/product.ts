@@ -1,9 +1,17 @@
-import { Entity, BaseEntity, Column, PrimaryColumn } from 'typeorm';
+import {
+  Entity,
+  BaseEntity,
+  Column,
+  PrimaryColumn,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
+import Category from './category';
 
 @Entity('product')
 class Product extends BaseEntity {
   @PrimaryColumn({ type: 'uuid' })
-  product_id: string;
+  id: string;
 
   @Column({ type: 'varchar' })
   product_name: string;
@@ -20,7 +28,8 @@ class Product extends BaseEntity {
   @Column({ type: 'numeric' })
   stock: number;
 
-  @Column({ type: 'numeric' })
-  category_id: number;
+  @OneToOne(() => Category, (category) => category.id)
+  @JoinColumn({ name: 'category_id' })
+  category: Category;
 }
 export default Product;

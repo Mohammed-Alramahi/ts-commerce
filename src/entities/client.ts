@@ -1,10 +1,20 @@
-import { Entity, BaseEntity, Column, PrimaryColumn } from 'typeorm';
+import {
+  Entity,
+  BaseEntity,
+  Column,
+  PrimaryColumn,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { Min } from 'class-validator';
+import Order from './order';
+import WishList from './wishlist';
 
 @Entity('client')
 class Client extends BaseEntity {
   @PrimaryColumn({ type: 'uuid' })
-  client_id: string;
+  id: string;
 
   @Column({ unique: true, type: 'varchar' })
   email: string;
@@ -30,6 +40,12 @@ class Client extends BaseEntity {
 
   @Column({ type: 'varchar' })
   phone: string;
+
+  @OneToMany(() => Order, (order) => order.client)
+  orders: Order[];
+
+  @OneToMany(() => WishList, (wishlist) => wishlist.id)
+  wishlist: WishList[];
 }
 
 export default Client;
