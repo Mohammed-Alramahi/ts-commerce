@@ -1,6 +1,6 @@
 import { createConnection } from 'typeorm';
 import dotenv from 'dotenv';
-import { Client, Product, Category } from './entities/index';
+import entites from './entities/index';
 dotenv.config({ path: 'config.env' });
 
 const connectDB = async () => {
@@ -12,8 +12,9 @@ const connectDB = async () => {
       port: process.env.DB_PORT as unknown as number,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
-      entities: [Client, Product, Category],
-      //synchronize: true,
+      entities: entites,
+      //this property for migrations
+      synchronize: true,
     });
     console.log('Connected');
   } catch (error) {
