@@ -6,6 +6,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
+
 import Category from './category';
 
 @Entity('product')
