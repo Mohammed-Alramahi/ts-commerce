@@ -5,9 +5,10 @@ import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import connectDB from './db';
-import { authRouter } from './routes/auth';
+import authRouter from './routes/auth';
 import { quoteOfTheDay } from "./qod";
-import { productsRouter } from "./routes/product";
+import productsRouter from "./routes/product";
+import adminRouter from "./routes/admin";
 const app: Application = express();
 
 
@@ -34,3 +35,4 @@ app.get('/', async(req: Request, res: Response) => {
 
 app.use('/api/auth', authRouter);
 app.use("/api/product", productsRouter);
+app.use("/api/admin", adminRouter);
