@@ -5,9 +5,11 @@ import {
   PrimaryColumn,
   OneToOne,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 
 import Category from './category';
+import Vendor from "./vendor";
 
 @Entity('product')
 class Product extends BaseEntity {
@@ -20,17 +22,28 @@ class Product extends BaseEntity {
   @Column({ type: 'varchar' })
   product_description: string;
 
-  @Column({ type: 'simple-array' })
-  images: string[];
+  @Column({ type: 'varchar' })
+  image1: string;
 
-  @Column({ type: 'numeric' })
+  @Column({ type: 'varchar' })
+  image2: string;
+
+  @Column({ type: 'varchar' })
+  image3: string;
+
+  @Column({ type: 'integer' })
   price: number;
 
-  @Column({ type: 'numeric' })
+  @Column({ type: "integer" })
   stock: number;
 
-  @OneToOne(() => Category, (category) => category.id)
+  @ManyToOne(() => Category, (category) => category.id)
   @JoinColumn({ name: 'category_id' })
-  category: Category;
+  category_id: Category;
+
+  @ManyToOne(() => Vendor, vendor => vendor.id)
+  @JoinColumn({ name: "vendor_id" })
+  vendor: Vendor;
+  
 }
 export default Product;

@@ -3,7 +3,7 @@ import { Min } from 'class-validator';
 import Order from './order';
 import WishList from './wishlist';
 @Entity('client')
-class Client extends BaseEntity {
+export default class Client extends BaseEntity {
   @PrimaryColumn({ type: 'uuid' })
   id: string;
 
@@ -35,8 +35,7 @@ class Client extends BaseEntity {
   @OneToMany(() => Order, (order) => order.client)
   orders: Order[];
 
-  @OneToMany(() => WishList, (wishlist) => wishlist.id)
+  @OneToMany(() => WishList, (wishlist) => wishlist.client)
   wishlist: WishList[];
 }
 
-export default Client;

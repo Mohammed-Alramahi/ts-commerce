@@ -9,7 +9,7 @@ import Client from './client';
 import Product from './product';
 
 @Entity('wishlist')
-class WishList extends BaseEntity {
+export default class WishList extends BaseEntity {
   @PrimaryColumn({ type: 'uuid' })
   id: string;
 
@@ -22,4 +22,3 @@ class WishList extends BaseEntity {
   product: Product;
 }
 
-export default WishList;
