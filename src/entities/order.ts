@@ -10,7 +10,7 @@ import {
 import Client from './client';
 
 @Entity('order')
-class Order extends BaseEntity {
+export default class Order extends BaseEntity {
   @PrimaryColumn({ type: 'uuid' })
   id: string;
 
@@ -33,4 +33,4 @@ class Order extends BaseEntity {
   client: Client;
 }
 
-export default Order;
+

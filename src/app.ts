@@ -6,7 +6,11 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import connectDB from './db';
 import { authRouter } from './routes/auth';
+import { quoteOfTheDay } from "./qod";
+import { productsRouter } from "./routes/product";
 const app: Application = express();
+
+
 
 app.use(express.json());
 app.use(cors());
@@ -22,10 +26,11 @@ const start = () => {
 
 start();
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/', async(req: Request, res: Response) => {
   res.send(
-    `<h1 style="text-align:center">“Never let the fear of striking out keep you from playing the game.”– Babe Ruth</h1>`
+    `<h1 style="text-align:center">`+await quoteOfTheDay()+`</h1>`
   );
 });
 
 app.use('/api/auth', authRouter);
+app.use("/api/product", productsRouter);

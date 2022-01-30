@@ -10,7 +10,7 @@ import Client from './client';
 import Product from './product';
 
 @Entity('review')
-class Review extends BaseEntity {
+export default class Review extends BaseEntity {
   @PrimaryColumn({ type: 'uuid' })
   id: string;
 
@@ -28,4 +28,4 @@ class Review extends BaseEntity {
   @JoinColumn({ name: 'product_id' })
   product: Product;
 }
-export default Review;
+

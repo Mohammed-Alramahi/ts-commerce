@@ -1,19 +1,26 @@
 import { createConnection } from 'typeorm';
 import dotenv from 'dotenv';
-import entites from './entities/index';
+import Client from "./entities/client";
+import Category from "./entities/category";
+import Order from "./entities/order";
+import Product from "./entities/product";
+import Review from "./entities/review";
+import Vendor from "./entities/vendor";
+import Wishlist from "./entities/wishlist";
 dotenv.config({ path: 'config.env' });
 
 const connectDB = async () => {
   try {
     await createConnection({
-      type: 'postgres',
+      type: 'mysql',
       host: process.env.DB_HOST,
       database: process.env.DB_NAME,
       port: process.env.DB_PORT as unknown as number,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
-      entities: entites,
-      //this property for migrations
+      entities: [Client,Category,Order,Product,Review,Vendor,Wishlist],
+      //this property for migrations,
+      
       synchronize: true,
     });
     console.log('Connected');

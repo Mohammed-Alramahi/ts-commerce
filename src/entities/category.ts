@@ -1,7 +1,7 @@
 import { Entity, BaseEntity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity('category')
-class Category extends BaseEntity {
+export default class Category extends BaseEntity {
   @PrimaryColumn({ type: 'uuid' })
   id: string;
 
@@ -15,4 +15,4 @@ class Category extends BaseEntity {
   category_description: string;
 }
 
-export default Category;
+

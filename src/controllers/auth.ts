@@ -25,6 +25,12 @@ export const login = async (
         token
       })
     }
+    else {
+      return res.json({
+        success:false,
+        error:"Wrong Credintials"
+      })
+    }
   }
 
 };

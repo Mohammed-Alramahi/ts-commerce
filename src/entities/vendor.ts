@@ -1,8 +1,9 @@
-import { BaseEntity, Entity, Column, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Entity, Column, PrimaryColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Min } from 'class-validator';
+import Product from "./product";
 
 @Entity('vendor')
-class Vendor extends BaseEntity {
+export default class Vendor extends BaseEntity {
   @PrimaryColumn({ type: 'uuid' })
   id: string;
 
@@ -27,5 +28,9 @@ class Vendor extends BaseEntity {
 
   @Column({ type: 'varchar' })
   phone: string;
+  
+  @OneToMany(() => Product, product => product)
+  products: Product[];
+  
 }
-export default Vendor;
+
