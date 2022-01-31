@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { login, register } from '../controllers/auth';
+import { login, register,verifyUser } from '../controllers/auth';
 
- const authRouter = Router();
+const authRouter = Router();
 
 authRouter.post('/login', login);
 authRouter.post('/register', register);
-
+authRouter.patch("/:userId",verifyUser)
 export default authRouter;

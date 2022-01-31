@@ -25,10 +25,10 @@ class Product extends BaseEntity {
   @Column({ type: 'varchar' })
   image1: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar',default:"product.jpg" })
   image2: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar',default:"product.jpg" })
   image3: string;
 
   @Column({ type: 'integer' })

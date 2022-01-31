@@ -13,33 +13,43 @@ export const login = async (
   const client = await createQueryBuilder("client").select("client").from(Client, "client").where("client.email = :email",{email}).getOne();
   if (!client) {
     return res.json({
-      error:"Wrong Credintials"
-    })
+      error: "Wrong Credintials"
+    });
   }
   else {
-    const comparePasswords = await bcrypt.compare(password, client.password);
-    if (comparePasswords) {
-      const token = jwt.sign(client.email, process.env.JWT_SECRET as Secret);
-      return res.json({
-        success:true,
-        token
-      })
-    }
+
+    if (client.verified) {
+      const comparePasswords = await bcrypt.compare(password, client.password);
+
+      if (comparePasswords) {
+        const token = jwt.sign(client.email, process.env.JWT_SECRET as Secret);
+        return res.json({
+          success:true,
+          token
+        })
+      }
+
+      else {
+        return res.status(404).json({
+          success:false,
+          error:"Wrong Credintials"
+        })
+      }
+    } 
+
     else {
-      return res.json({
+      return res.status(400).json({
         success:false,
-        error:"Wrong Credintials"
+        error:"account not verified yet"
       })
     }
   }
+  
 
 };
 
-export const register = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const register = async (req: Request, res: Response) => {
+  
   const {
     firstName,
     lastName,
@@ -49,26 +59,44 @@ export const register = async (
     city,
     phone,
     password,
+    country,
+    gender,
+    avatar
   } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
+  
   try {
-    const client = Client.create({
-      id: uuid(),
-      first_name: firstName,
-      last_name: lastName,
-      email,
-      password:hashedPassword,
-      address,
-      post_code: postCode,
-      city,
-      phone,
-    });
 
-    await client.save();
+    const existingUser = await Client.findOne({ where: { email } });
 
-    return res.json({
-      message: client,
-    });
+    if (!existingUser) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const verificationCode = uuid();
+      const client = Client.create({
+        id: uuid(),
+        first_name: firstName,
+        last_name: lastName,
+        gender,
+        email,
+        password:hashedPassword,
+        country,
+        address,
+        post_code: postCode,
+        city,
+        phone,
+        avatar,
+        verification_code: verificationCode,
+      });
+  
+      await client.save();
+  
+      return res.json({
+        message: client,
+      });
+    }
+    else {
+      throw new Error("User Already Exists!");
+    }
+    
   } catch (err) {
     let message: string = 'unknown error';
 
@@ -76,9 +104,16 @@ export const register = async (
       message = err.message;
     }
 
-    res.json({
+    res.status(409).json({
       error: message,
     });
-    next(err);
+    
   }
 };
+
+export const verifyUser = async (req:Request, res:Response) => {
+  return res.json({
+      user: req.params.userId,
+      token:req.query.token
+  });
+}
