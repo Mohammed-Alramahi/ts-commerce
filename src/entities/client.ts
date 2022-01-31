@@ -1,5 +1,4 @@
 import { Entity, BaseEntity, Column, PrimaryColumn, OneToMany } from 'typeorm';
-import { Min } from 'class-validator';
 import Order from './order';
 import WishList from './wishlist';
 @Entity('client')
@@ -17,14 +16,16 @@ export default class Client extends BaseEntity {
   last_name: string;
 
   @Column({ type: 'varchar' })
-  @Min(8)
   password: string;
 
   @Column({ type: 'varchar' })
   address: string;
 
-  @Column({ type: 'numeric' })
+  @Column({ type: 'varchar' })
   post_code: number;
+
+  @Column({ type: "varchar" })
+  country: string;
 
   @Column({ type: 'varchar' })
   city: string;
@@ -32,10 +33,27 @@ export default class Client extends BaseEntity {
   @Column({ type: 'varchar', unique: true })
   phone: string;
 
+  @Column({ type: "boolean", default: false })
+  blacklisted: boolean;
+
+  @Column({ type: "varchar" })
+  gender: string;
+
+  @Column({ type: "varchar" })
+  avatar: string; 
+    
+  @Column({ type: "varchar" })
+  verification_code: string;
+  
+  @Column({ type: "boolean", default: false })
+  verified: boolean;
+  
   @OneToMany(() => Order, (order) => order.client)
   orders: Order[];
 
   @OneToMany(() => WishList, (wishlist) => wishlist.client)
   wishlist: WishList[];
+
+ 
 }
 

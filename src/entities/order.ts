@@ -17,7 +17,7 @@ export default class Order extends BaseEntity {
   @Column({ type: 'date' })
   order_date: Date;
 
-  @Column({ type: 'numeric' })
+  @Column({ type: "integer" })
   order_total: number;
 
   @Column({ type: 'date' })

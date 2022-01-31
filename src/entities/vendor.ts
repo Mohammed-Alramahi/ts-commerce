@@ -23,11 +23,17 @@ export default class Vendor extends BaseEntity {
   @Column({ type: 'numeric' })
   post_code: number;
 
+  @Column({ type: "varchar" })
+  country: string;
+  
   @Column({ type: 'varchar' })
   city: string;
 
   @Column({ type: 'varchar' })
   phone: string;
+
+  @Column({ type: "varchar" })
+  avatar: string;
   
   @OneToMany(() => Product, product => product)
   products: Product[];
