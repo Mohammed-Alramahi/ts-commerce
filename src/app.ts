@@ -33,6 +33,6 @@ app.get('/', async(req: Request, res: Response) => {
   );
 });
 
-app.use('/api/auth', authRouter);
+app.use("/api/auth", authRouter);
 app.use("/api/product", productsRouter);
 app.use("/api/admin", adminRouter);

@@ -4,18 +4,18 @@ import { createQueryBuilder } from "typeorm";
 import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcrypt';
 import jwt, { Secret } from "jsonwebtoken";
-export const login = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+
+export const login = async (req: Request, res: Response) => {
+  
   const { email, password } = req.body;
   const client = await createQueryBuilder("client").select("client").from(Client, "client").where("client.email = :email",{email}).getOne();
+  
   if (!client) {
     return res.json({
       error: "Wrong Credintials"
     });
   }
+
   else {
 
     if (client.verified) {
@@ -44,7 +44,6 @@ export const login = async (
       })
     }
   }
-  
 
 };
 
@@ -111,9 +110,49 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-export const verifyUser = async (req:Request, res:Response) => {
-  return res.json({
-      user: req.params.userId,
-      token:req.query.token
-  });
+export const verifyUser = async (req: Request, res: Response) => {
+  
+  const { token } = req.body;
+  const { userId } = req.params;
+ 
+  try {
+
+    const client = await createQueryBuilder("client")
+      .select("client")
+      .from(Client, "client")
+      .where("client.id= :userId", { userId })
+      .andWhere("client.verification_code= :token", { token })
+      .andWhere("client.verified= false")
+      .getOne();
+
+    if (client) {
+      await createQueryBuilder("client")
+        .update(Client)
+        .set({ verified: true })
+        .where("client.id= :userId", { userId })
+        .execute();
+        return res.status(200).json({ success: true });
+    }
+
+    else {
+      return res.status(400).json({
+        success: false,
+        error: "wrong information provided",
+      });
+
+    }
+
+  }
+  catch (err) {
+    let message: string = 'Unknown Error';
+    
+    if (err instanceof Error) {
+      message = err.message;  
+    }
+
+    return res.status(409).json({
+      error: message,
+    });
+  }
+  
 }

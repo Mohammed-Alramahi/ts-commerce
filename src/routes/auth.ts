@@ -5,5 +5,5 @@ const authRouter = Router();
 
 authRouter.post('/login', login);
 authRouter.post('/register', register);
-authRouter.patch("/:userId",verifyUser)
+authRouter.patch('/verify/:userId',verifyUser)
 export default authRouter;
