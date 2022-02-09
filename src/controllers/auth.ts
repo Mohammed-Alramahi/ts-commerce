@@ -1,54 +1,65 @@
 import { Request, Response, NextFunction } from 'express';
 import Client from '../entities/client';
-import { createQueryBuilder } from "typeorm";
+import { BaseEntity, createQueryBuilder, EntitySchema } from "typeorm";
 import { v4 as uuid } from 'uuid';
 import bcrypt from 'bcrypt';
 import jwt, { Secret } from "jsonwebtoken";
+import Vendor from "../entities/vendor";
+import Admin from "../entities/admin";
 
 export const login = async (req: Request, res: Response) => {
-  
-  const { email, password } = req.body;
-  const client = await createQueryBuilder("client").select("client").from(Client, "client").where("client.email = :email",{email}).getOne();
-  
-  if (!client) {
+
+  const { email, password, role } = req.body;
+  let roleEntity;
+  if (role == "client") {
+    roleEntity = Client;
+  }
+  else if (role == "admin") {
+    roleEntity = Admin;
+  }
+  else {
+    roleEntity = Vendor;
+  }
+
+  let user = await createQueryBuilder(role).select(role).from(roleEntity, role).where(`${role}.email = :email`, { email }).getOne();
+
+  if (!user) {
     return res.json({
       error: "Wrong Credintials"
     });
   }
 
   else {
-
-    if (client.verified) {
-      const comparePasswords = await bcrypt.compare(password, client.password);
+    if (user.verified) {
+      const comparePasswords = await bcrypt.compare(password, user.password);
 
       if (comparePasswords) {
-        const token = jwt.sign(client.email, process.env.JWT_SECRET as Secret);
+        const token = jwt.sign({ email: user.email, role: role }, process.env.JWT_SECRET as Secret);
         return res.json({
-          success:true,
+          success: true,
           token
-        })
+        });
       }
 
       else {
         return res.status(404).json({
-          success:false,
-          error:"Wrong Credintials"
-        })
+          success: false,
+          error: "Wrong Credintials"
+        });
       }
-    } 
-
+    }
     else {
       return res.status(400).json({
-        success:false,
-        error:"account not verified yet"
-      })
+        success: false,
+        error: "account not verified yet"
+      });
     }
   }
 
 };
 
 export const register = async (req: Request, res: Response) => {
-  
+
   const {
     firstName,
     lastName,
@@ -62,7 +73,7 @@ export const register = async (req: Request, res: Response) => {
     gender,
     avatar
   } = req.body;
-  
+
   try {
 
     const existingUser = await Client.findOne({ where: { email } });
@@ -76,7 +87,7 @@ export const register = async (req: Request, res: Response) => {
         last_name: lastName,
         gender,
         email,
-        password:hashedPassword,
+        password: hashedPassword,
         country,
         address,
         post_code: postCode,
@@ -85,17 +96,18 @@ export const register = async (req: Request, res: Response) => {
         avatar,
         verification_code: verificationCode,
       });
-  
+
       await client.save();
-  
+      let message = client.email + " has been created successfully";
       return res.json({
-        message: client,
+        success: true,
+        message
       });
     }
     else {
       throw new Error("User Already Exists!");
     }
-    
+
   } catch (err) {
     let message: string = 'unknown error';
 
@@ -106,15 +118,15 @@ export const register = async (req: Request, res: Response) => {
     res.status(409).json({
       error: message,
     });
-    
+
   }
 };
 
 export const verifyUser = async (req: Request, res: Response) => {
-  
+
   const { token } = req.body;
   const { userId } = req.params;
- 
+
   try {
 
     const client = await createQueryBuilder("client")
@@ -131,7 +143,7 @@ export const verifyUser = async (req: Request, res: Response) => {
         .set({ verified: true })
         .where("client.id= :userId", { userId })
         .execute();
-        return res.status(200).json({ success: true });
+      return res.status(200).json({ success: true });
     }
 
     else {
@@ -145,14 +157,14 @@ export const verifyUser = async (req: Request, res: Response) => {
   }
   catch (err) {
     let message: string = 'Unknown Error';
-    
+
     if (err instanceof Error) {
-      message = err.message;  
+      message = err.message;
     }
 
     return res.status(409).json({
       error: message,
     });
   }
-  
-}
+
+};

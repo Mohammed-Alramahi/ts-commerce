@@ -25,7 +25,7 @@ export default class Vendor extends BaseEntity {
 
   @Column({ type: "varchar" })
   country: string;
-  
+
   @Column({ type: 'varchar' })
   city: string;
 
@@ -34,9 +34,12 @@ export default class Vendor extends BaseEntity {
 
   @Column({ type: "varchar" })
   avatar: string;
-  
+
   @OneToMany(() => Product, product => product)
   products: Product[];
-  
+
+  @Column({ type: 'boolean', default: true })
+  verified: boolean;
+
 }
 

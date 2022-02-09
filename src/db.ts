@@ -7,10 +7,12 @@ import Product from "./entities/product";
 import Review from "./entities/review";
 import Vendor from "./entities/vendor";
 import Wishlist from "./entities/wishlist";
+import Admin from "./entities/admin";
 dotenv.config({ path: 'config.env' });
 
 const connectDB = async () => {
   try {
+
     await createConnection({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -18,12 +20,12 @@ const connectDB = async () => {
       port: process.env.DB_PORT as unknown as number,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
-      entities: [Client,Category,Order,Product,Review,Vendor,Wishlist],
+      entities: [Client, Category, Order, Product, Review, Vendor, Wishlist, Admin],
       //this property for migrations,
-      
       synchronize: true,
     });
     console.log('Connected');
+
   } catch (error) {
     console.error(error);
     throw new Error('Unable to Connect');

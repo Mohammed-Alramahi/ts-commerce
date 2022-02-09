@@ -5,7 +5,7 @@ export default class Category extends BaseEntity {
   @PrimaryColumn({ type: 'uuid' })
   id: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', unique: true })
   category_name: string;
 
   @Column({ type: 'varchar' })
