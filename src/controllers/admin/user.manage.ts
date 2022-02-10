@@ -36,6 +36,14 @@ export const blackList = async (req: Request, res: Response) => {
         .where("client.id= :userId", { userId }).execute();
 };
 
+export const unBlackList = async (req: Request, res: Response) => {
+    const { userId } = req.params;
+    await createQueryBuilder("client")
+        .update(Client)
+        .set({ blacklisted: false })
+        .where("client.id= :userId", { userId }).execute();
+};
+
 export const addUser = async (req: Request, res: Response) => {
     const {
         firstName,

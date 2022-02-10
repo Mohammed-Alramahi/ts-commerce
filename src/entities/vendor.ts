@@ -8,7 +8,7 @@ export default class Vendor extends BaseEntity {
   id: string;
 
   @Column({ type: 'varchar' })
-  first_name: string;
+  name: string;
 
   @Column({ type: 'varchar' })
   email: string;

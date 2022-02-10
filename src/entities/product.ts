@@ -25,10 +25,10 @@ class Product extends BaseEntity {
   @Column({ type: 'varchar' })
   image1: string;
 
-  @Column({ type: 'varchar',default:"product.jpg" })
+  @Column({ type: 'varchar', default: "product.jpg" })
   image2: string;
 
-  @Column({ type: 'varchar',default:"product.jpg" })
+  @Column({ type: 'varchar', default: "product.jpg" })
   image3: string;
 
   @Column({ type: 'integer' })
@@ -39,11 +39,11 @@ class Product extends BaseEntity {
 
   @ManyToOne(() => Category, (category) => category.id)
   @JoinColumn({ name: 'category_id' })
-  category_id: Category;
+  category: Category;
 
   @ManyToOne(() => Vendor, vendor => vendor.id)
   @JoinColumn({ name: "vendor_id" })
   vendor: Vendor;
-  
+
 }
 export default Product;

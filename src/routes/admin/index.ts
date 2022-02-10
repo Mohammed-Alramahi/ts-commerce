@@ -10,4 +10,5 @@ adminRouter.use(authenticate);
 adminRouter.use(adminCheck);
 adminRouter.use("/category", catRouter);
 adminRouter.use("/user", userRouter);
+
 export default adminRouter;

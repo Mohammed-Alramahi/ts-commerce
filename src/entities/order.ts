@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import Client from './client';
+import Vendor from "./vendor";
 
 @Entity('order')
 export default class Order extends BaseEntity {
@@ -31,6 +32,12 @@ export default class Order extends BaseEntity {
     name: 'client_id',
   })
   client: Client;
+
+  @ManyToOne(() => Vendor, (vendor) => vendor.id)
+  @JoinColumn({
+    name: 'vendor_id',
+  })
+  vendor: Vendor;
 }
 
 
