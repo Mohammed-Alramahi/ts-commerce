@@ -147,9 +147,18 @@ export const verifyUser = async (req: Request, res: Response) => {
     }
 
     else {
-      return res.status(400).json({
+      const verified = await Client.findOne({ id: userId, verified: true });
+      if (!verified) {
+
+        return res.status(400).json({
+          success: false,
+          error: "wrong information provided",
+        });
+
+      }
+      return res.status(409).json({
         success: false,
-        error: "wrong information provided",
+        error: "user already verified"
       });
 
     }

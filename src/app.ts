@@ -27,9 +27,9 @@ const start = () => {
 
 start();
 
-app.get('/', async(req: Request, res: Response) => {
+app.get('/', async (req: Request, res: Response) => {
   res.send(
-    `<h1 style="text-align:center">`+await quoteOfTheDay()+`</h1>`
+    `<h1 style="text-align:center">` + await quoteOfTheDay() + `</h1>`
   );
 });
 

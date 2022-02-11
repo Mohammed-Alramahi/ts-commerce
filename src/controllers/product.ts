@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import Product from "../entities/product";
-import { v4 as uuid, parse } from "uuid";
+import { v4 as uuid } from "uuid";
 import { createQueryBuilder } from "typeorm";
-import Vendor from "../entities/vendor";
 
 export const getAllProducts = async (req: Request, res: Response, next: NextFunction) => {
     return res.json(await Product.find());
@@ -28,15 +27,12 @@ export const getSingleProduct = async (req: Request, res: Response, next: NextFu
 export const getProductByVendorId = async (req: Request, res: Response) => {
     const { vendorId } = req.params;
     const products = await createQueryBuilder("product")
-        .select(['p.product_name'
-            , 'p.product_description'
-            , 'p.image1'
-            , 'p.image2'
-            , 'p.image3'
-            , 'p.price'
-            , 'p.stock'
-            , 'p.category_id'
-            , 'v.name', 'c.category_name']).from(Product, "p").leftJoin('p.vendor', 'v').leftJoin('p.category', 'c').where("p.vendor_id= :vendorId", { vendorId }).getMany();
+        .select(['p.product_name', 'p.product_description', 'p.image1'
+            , 'p.image2', 'p.image3', 'p.price', 'p.stock'
+            , 'p.category_id', 'v.name', 'c.category_name'])
+        .from(Product, "p").leftJoin('p.vendor', 'v')
+        .leftJoin('p.category', 'c')
+        .where("p.vendor_id= :vendorId", { vendorId }).getMany();
     return res.json(products);
 };
 

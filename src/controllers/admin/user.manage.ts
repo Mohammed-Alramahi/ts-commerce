@@ -34,6 +34,11 @@ export const blackList = async (req: Request, res: Response) => {
         .update(Client)
         .set({ blacklisted: true })
         .where("client.id= :userId", { userId }).execute();
+
+    return res.status(200).json({
+        success: true,
+        message: `user with id (${userId}) is banned`
+    });
 };
 
 export const unBlackList = async (req: Request, res: Response) => {
@@ -42,6 +47,11 @@ export const unBlackList = async (req: Request, res: Response) => {
         .update(Client)
         .set({ blacklisted: false })
         .where("client.id= :userId", { userId }).execute();
+
+    return res.status(200).json({
+        success: true,
+        message: `user with id (${userId}) un-banned`
+    });
 };
 
 export const addUser = async (req: Request, res: Response) => {
